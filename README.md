@@ -12,7 +12,7 @@ http://stack.gl/glsl-lighting-walkthrough/index.html
 
 #### topics
 
-This covers some lower level aspects of WebGL and GLSL, including:
+This will cover some lower level aspects of WebGL and GLSL, including:
 
 - drawing meshes with `gl-geometry` and `gl-shader`
 - setting up your own camera and model matrices
