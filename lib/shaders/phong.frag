@@ -15,12 +15,14 @@ varying vec3 vNormal;
 
 #pragma glslify: faceNormals = require('glsl-face-normal')
 #pragma glslify: perturb = require('glsl-perturb-normal')
-#pragma glslify: computeDiffuse = require('glsl-diffuse-lambert')
+#pragma glslify: computeDiffuse = require('glsl-diffuse-oren-nayar')
 #pragma glslify: computeSpecular = require('glsl-specular-blinn-phong')
 #pragma glslify: attenuation = require('./attenuation')
 
 const vec2 UV_SCALE = vec2(8.0, 1.0);
-const float shininess = 100.0;
+const float shininess = 1.0;
+const float roughness = 0.9;
+const float albedo = 0.95;
 
 uniform sampler2D texDiffuse;
 uniform sampler2D texNormal;
@@ -63,8 +65,8 @@ void main() {
   vec3 N = perturb(normalMap, normal, -V, vUv); //surface normal
 
   //compute our diffuse & specular terms
-  float specular = specularStrength * computeSpecular(L, V, N, 1.0);
-  vec3 diffuse = light.color * computeDiffuse(L, N) * falloff;
+  float specular = specularStrength * computeSpecular(L, V, N, shininess);
+  vec3 diffuse = light.color * computeDiffuse(L, V, N, roughness, albedo) * falloff;
   vec3 ambient = light.ambient;
 
   //add the lighting

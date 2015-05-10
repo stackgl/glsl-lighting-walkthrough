@@ -5,7 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "budo index.js:bundle.js --live --verbose -- -t babelify -t glslify -t [ installify --save ] -p errorify | garnish",
+    "start": "budo index.js:bundle.js --live --verbose -- -t babelify -t glslify -p errorify | garnish",
     "build": "browserify index.js -t babelify -t glslify | uglifyjs -cm > bundle.js"
   },
   "author": {
@@ -25,6 +25,7 @@
     "gl-texture2d": "^2.0.8",
     "gl-vec3": "^1.0.3",
     "glsl-diffuse-lambert": "^1.0.0",
+    "glsl-diffuse-oren-nayar": "^1.0.2",
     "glsl-face-normal": "^1.0.2",
     "glsl-inverse": "^1.0.0",
     "glsl-perturb-normal": "^1.0.2",
