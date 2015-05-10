@@ -2,7 +2,9 @@
 
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
-This is currently a work in progress.
+**This is currently a work in progress.**
+
+![screen shot](http://i.imgur.com/6Ayorad.png)
 
 You can see the demo here:
 
