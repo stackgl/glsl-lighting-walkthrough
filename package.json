@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "start": "budo index.js:bundle.js --live --verbose -- -t babelify -t glslify -t [ installify --save ] -p errorify | garnish",
-    "build": "browserify index.js | uglifyjs -cm > bundle.js"
+    "build": "browserify index.js -t babelify -t glslify | uglifyjs -cm > bundle.js"
   },
   "author": {
     "name": "Matt DesLauriers",
