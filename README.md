@@ -79,6 +79,8 @@ We use a "phong" material for our torus, which we will explore in more depth bel
 - [shaders/phong.frag](lib/shaders/phong.frag)
 - [shaders/phong.vert](lib/shaders/phong.vert)
 
+There are many ways to skin a cat; this is just one approach to phong shading. 
+
 ## phong
 
 ### standard derivatives
@@ -291,7 +293,7 @@ float attenuation(float r, float f, float d) {
 
 With our light direction, surface normal, and view direction, we can start to work on diffuse lighting. The color is multiplied by falloff to create the effect of a distant light.
 
-For rough surfaces, [glsl-diffuse-oren-nayar](https://www.npmjs.com/package/glsl-diffuse-oren-nayar) looks a bit better than [glsl-diffuse-lambert](https://www.npmjs.com/package/glsl-diffuse-lambert).
+For rough surfaces, [glsl-diffuse-oren-nayar](https://www.npmjs.com/package/glsl-diffuse-oren-nayar) looks a bit better than [glsl-diffuse-lambert](https://www.npmjs.com/package/glsl-diffuse-lambert). 
 
 ```glsl
 #pragma glslify: computeDiffuse = require('glsl-diffuse-oren-nayar')
@@ -305,11 +307,13 @@ For rough surfaces, [glsl-diffuse-oren-nayar](https://www.npmjs.com/package/glsl
   vec3 diffuseColor = textureLinear(texDiffuse, uv).rgb;
 ```
 
+These shading functions are known as [bidirectional reflectance distribution functions](http://en.wikipedia.org/wiki/Bidirectional_reflectance_distribution_function) (BRDF).
+
 ### specular
 
 ![specular](http://i.imgur.com/lDimd4U.png)
 
-Similarly, we can apply specular with one of the following:
+Similarly, we can apply specular with one of the following BRDFs:
 
 - [glsl-specular-blinn-phong](https://www.npmjs.com/package/glsl-specular-blinn-phong)
 - [glsl-specular-phong](https://www.npmjs.com/package/glsl-specular-phong)
@@ -353,7 +357,7 @@ Our final color is going straight to the screen, so we should re-apply the gamma
   gl_FragColor.a   = 1.0;
 ```
 
-[The final result.](http://stack.gl/glsl-lighting-walkthrough/)
+The [final result](http://stack.gl/glsl-lighting-walkthrough/). 
 
 ## Further Reading
 
