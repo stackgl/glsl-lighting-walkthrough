@@ -16,12 +16,13 @@ varying vec3 vNormal;
 #pragma glslify: faceNormals = require('glsl-face-normal')
 #pragma glslify: perturb = require('glsl-perturb-normal')
 #pragma glslify: computeDiffuse = require('glsl-diffuse-oren-nayar')
-#pragma glslify: computeSpecular = require('glsl-specular-blinn-phong')
-#pragma glslify: attenuation = require('./attenuation')
+#pragma glslify: computeSpecular = require('glsl-specular-phong')
+#pragma glslify: attenuation = require('./madams-attenuation')
 
 const vec2 UV_SCALE = vec2(8.0, 1.0);
-const float shininess = 1.0;
-const float roughness = 0.9;
+const float specularScale = 0.25;
+const float shininess = 20.0;
+const float roughness = 1.0;
 const float albedo = 0.95;
 
 uniform sampler2D texDiffuse;
@@ -33,6 +34,14 @@ uniform mat4 model;
 uniform mat4 view;
 
 uniform Light light;
+
+vec3 sampleLinear(sampler2D tex, vec2 uv) {
+  return pow(texture2D(tex, uv).rgb, vec3(2.2));
+}
+
+vec3 toGamma(vec3 color) {
+  return pow(color, vec3(1.0 / 2.2));
+}
 
 void main() {
   vec3 normal = vec3(0.0);
@@ -51,11 +60,12 @@ void main() {
   float lightDistance = length(lightVector);
   float falloff = attenuation(light.radius, light.falloff, lightDistance);
 
-  //now sample from our repeating texture
+  //now sample from our repeating brick texture
+  //assume its in sRGB, so we need to correct for gamma
   vec2 uv = vUv * UV_SCALE;
-  vec3 diffuseColor = texture2D(texDiffuse, uv).rgb;
-  vec3 normalMap = texture2D(texNormal, uv).rgb * 2.0 - 1.0;
-  float specularStrength = texture2D(texSpecular, uv).r;
+  vec3 diffuseColor = sampleLinear(texDiffuse, uv);
+  vec3 normalMap = sampleLinear(texNormal, uv) * 2.0 - 1.0;
+  float specularStrength = sampleLinear(texSpecular, uv).r;
   
   //our normal map has an inverted green channel
   normalMap.y *= -1.0;
@@ -65,11 +75,14 @@ void main() {
   vec3 N = perturb(normalMap, normal, -V, vUv); //surface normal
 
   //compute our diffuse & specular terms
-  float specular = specularStrength * computeSpecular(L, V, N, shininess);
+  float specular = specularStrength * computeSpecular(L, V, N, shininess) * specularScale;
   vec3 diffuse = light.color * computeDiffuse(L, V, N, roughness, albedo) * falloff;
   vec3 ambient = light.ambient;
 
   //add the lighting
   color += diffuseColor * (diffuse + ambient) + specular;
+
+  //re-apply gamma to output buffer
+  color.rgb = toGamma(color.rgb);
   gl_FragColor = vec4(color, 1.0);
 }
