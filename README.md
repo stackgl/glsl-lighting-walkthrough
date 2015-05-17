@@ -95,6 +95,17 @@ var shader = createShader(gl, vert, frag)
 ...
 ```
 
+And, in our fragment shader we need to enable it explicitly:
+
+```glsl
+#extension GL_OES_standard_derivatives : enable
+precision highp float;
+
+void main() {
+  ...
+}
+```
+
 The extension is used in two places in our final shader:
 
 - [glsl-face-normal](https://www.npmjs.com/package/glsl-face-normal) for flat shading (optional)
