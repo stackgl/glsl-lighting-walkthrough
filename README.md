@@ -340,6 +340,8 @@ Our final color is going straight to the screen, so we should re-apply the gamma
   gl_FragColor.a   = 1.0;
 ```
 
+[The final result.](http://stack.gl/glsl-lighting-walkthrough/)
+
 ## License
 
 MIT. See [LICENSE.md](http://github.com/stackgl/glsl-lighting-walkthrough/blob/master/LICENSE.md) for details.
