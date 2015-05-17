@@ -61,7 +61,7 @@ The code is using Babelify for ES6 template strings, destructuring, and arrow fu
 
 - [index.js](index.js) - loads images, then boots up the app
 - [lib/app.js](lib/app.js) - sets up a WebGL render loop and draws the scene
-- [lib/scene.js](lib/scene.js) - positions the light and draws meshes
+- [lib/scene.js](lib/scene.js) - sets up textures, positions the light and draws meshes
 - [lib/create-sphere.js](lib/create-sphere.js) - create a 3D sphere for the light source
 - [lib/create-torus.js](lib/create-torus.js) - creates a 3D torus with a phong shader
 
