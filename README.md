@@ -355,6 +355,12 @@ Our final color is going straight to the screen, so we should re-apply the gamma
 
 [The final result.](http://stack.gl/glsl-lighting-walkthrough/)
 
+## Further Reading
+
+- [Tom Dalling - Modern OpenGL Series](http://www.tomdalling.com/blog/category/modern-opengl/)
+- [GPU Gems - The Importance of Being Linear](http://http.developer.nvidia.com/GPUGems3/gpugems3_ch24.html)
+- [Normal Mapping Without Precomputed Tangents](http://www.thetenthplanet.de/archives/1180)
+
 ## License
 
 MIT. See [LICENSE.md](http://github.com/stackgl/glsl-lighting-walkthrough/blob/master/LICENSE.md) for details.
