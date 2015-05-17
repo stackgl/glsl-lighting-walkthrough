@@ -18,6 +18,8 @@ varying vec3 vNormal;
 #pragma glslify: computeDiffuse = require('glsl-diffuse-oren-nayar')
 #pragma glslify: computeSpecular = require('glsl-specular-phong')
 #pragma glslify: attenuation = require('./madams-attenuation')
+#pragma glslify: toLinear = require('glsl-gamma/in')
+#pragma glslify: toGamma = require('glsl-gamma/out')
 
 const vec2 UV_SCALE = vec2(8.0, 1.0);
 const float specularScale = 0.25;
@@ -35,12 +37,8 @@ uniform mat4 view;
 
 uniform Light light;
 
-vec3 sampleLinear(sampler2D tex, vec2 uv) {
-  return pow(texture2D(tex, uv).rgb, vec3(2.2));
-}
-
-vec3 toGamma(vec3 color) {
-  return pow(color, vec3(1.0 / 2.2));
+vec4 textureLinear(sampler2D uTex, vec2 uv) {
+  return toLinear(texture2D(uTex, uv));
 }
 
 void main() {
@@ -63,9 +61,9 @@ void main() {
   //now sample from our repeating brick texture
   //assume its in sRGB, so we need to correct for gamma
   vec2 uv = vUv * UV_SCALE;
-  vec3 diffuseColor = sampleLinear(texDiffuse, uv);
-  vec3 normalMap = sampleLinear(texNormal, uv) * 2.0 - 1.0;
-  float specularStrength = sampleLinear(texSpecular, uv).r;
+  vec3 diffuseColor = textureLinear(texDiffuse, uv).rgb;
+  vec3 normalMap = textureLinear(texNormal, uv).rgb * 2.0 - 1.0;
+  float specularStrength = textureLinear(texSpecular, uv).r;
   
   //our normal map has an inverted green channel
   normalMap.y *= -1.0;
@@ -83,6 +81,7 @@ void main() {
   color += diffuseColor * (diffuse + ambient) + specular;
 
   //re-apply gamma to output buffer
-  color.rgb = toGamma(color.rgb);
-  gl_FragColor = vec4(color, 1.0);
+  color = toGamma(color);
+  gl_FragColor.rgb = color;
+  gl_FragColor.a = 1.0;
 }

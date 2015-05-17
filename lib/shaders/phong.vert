@@ -17,13 +17,12 @@ void main() {
   mat4 modelViewMatrix = view * model;
   vec4 viewModelPosition = modelViewMatrix * position;
 
+  vViewPosition = viewModelPosition.xyz;
+  vUv = uv;
+  gl_Position = projection * viewModelPosition;
+
   // Rotate the object normals by a 3x3 normal matrix.
   // We could also do this CPU-side to avoid doing it per-vertex
   mat3 normalMatrix = transpose(inverse(mat3(modelViewMatrix)));
-
   vNormal = normalize(normalMatrix * normal);
-  vViewPosition = viewModelPosition.xyz;
-  vUv = uv;
-
-  gl_Position = projection * viewModelPosition;
 }
