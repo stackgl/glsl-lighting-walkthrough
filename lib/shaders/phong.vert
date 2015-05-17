@@ -25,5 +25,5 @@ void main() {
   vViewPosition = viewModelPosition.xyz;
   vUv = uv;
 
-  gl_Position = projection * view * model * vec4(position.xyz, 1.0);
+  gl_Position = projection * viewModelPosition;
 }

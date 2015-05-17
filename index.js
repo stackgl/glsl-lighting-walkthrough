@@ -1,14 +1,15 @@
-import createApp from './lib/app'
+var createApp = require('./lib/app')
+var each = require('async-each')
+var loadImage = require('img')
 
-import each from 'async-each'
-import loadImage from 'img'
-
-//load our texture maps
+// load our texture maps
 const names = ['diffuse', 'normal', 'specular']
-const urls = names.map(x => `assets/brick-${x}.jpg`)
+const urls = names.map(x => {
+  return `assets/brick-${x}.jpg`
+})
 
 each(urls, loadImage, (err, images) => {
-  if (err)
+  if (err) 
     throw err
 
   const app = createApp(images)
