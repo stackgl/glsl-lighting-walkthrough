@@ -10,6 +10,7 @@ varying vec3 vNormal;
 varying vec2 vUv;
 varying vec3 vViewPosition;
 
+//import some common functions not supported by GLSL ES
 #pragma glslify: transpose = require('glsl-transpose')
 #pragma glslify: inverse = require('glsl-inverse')
 
@@ -17,6 +18,7 @@ void main() {
   mat4 modelViewMatrix = view * model;
   vec4 viewModelPosition = modelViewMatrix * position;
 
+  // Pass varyings to fragment shader
   vViewPosition = viewModelPosition.xyz;
   vUv = uv;
   gl_Position = projection * viewModelPosition;
