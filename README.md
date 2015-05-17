@@ -12,7 +12,7 @@ This article provides an overview of the various steps involved in lighting a me
 - normal & specular maps for detail
 - attenuation for point light falloff
 - Oren-Nayar diffuse for rough surfaces
-- phong reflectance model for specular highlights
+- Phong reflectance model for specular highlights
 
 It is not intended as a full-blown beginner's guide, and assumes prior knowledge of WebGL and stackgl rendering. Although it is implemented with stackgl, the same concepts and shader code could be used in ThreeJS and other frameworks.
 
