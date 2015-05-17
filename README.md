@@ -4,7 +4,7 @@
 
 [(live demo)](http://stack.gl/glsl-lighting-walkthrough/)
 
-This article provides an overview of the various steps involved in lighting a mesh with a custom shader. Some of the features of the demo:
+This article provides an overview of the various steps involved in lighting a mesh with a custom GLSL shader. Some of the features of the demo:
 
 - per-pixel lighting
 - flat & smooth normals
@@ -14,7 +14,7 @@ This article provides an overview of the various steps involved in lighting a me
 - Oren-Nayar diffuse for rough surfaces
 - phong reflectance model for specular highlights
 
-It is not intended as a full-blown beginner's guide, and assumes prior knowledge of WebGL and stackgl rendering.
+It is not intended as a full-blown beginner's guide, and assumes prior knowledge of WebGL and stackgl rendering. Although it is implemented with stackgl, the same concepts and shader code could be used in ThreeJS and other frameworks.
 
 If you have questions, comments or improvements, please [post a new issue](https://github.com/stackgl/glsl-lighting-walkthrough/issues).
 
