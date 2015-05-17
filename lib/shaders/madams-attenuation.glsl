@@ -4,7 +4,6 @@
 // 
 // Improved
 // https://imdoingitwrong.wordpress.com/2011/02/10/improved-light-attenuation/
-
 float attenuation(float r, float f, float d) {
   float denom = d / r + 1.0;
   float attenuation = 1.0 / (denom*denom);

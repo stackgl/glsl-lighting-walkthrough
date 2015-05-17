@@ -16,13 +16,13 @@ varying vec3 vNormal;
 #pragma glslify: faceNormals = require('glsl-face-normal')
 #pragma glslify: perturb = require('glsl-perturb-normal')
 #pragma glslify: computeDiffuse = require('glsl-diffuse-oren-nayar')
-#pragma glslify: computeSpecular = require('glsl-specular-blinn-phong')
+#pragma glslify: computeSpecular = require('glsl-specular-phong')
 #pragma glslify: attenuation = require('./madams-attenuation')
 
 const vec2 UV_SCALE = vec2(8.0, 1.0);
-const float specularScale = 0.4;
-const float shininess = 40.0;
-const float roughness = 0.9;
+const float specularScale = 0.25;
+const float shininess = 20.0;
+const float roughness = 1.0;
 const float albedo = 0.95;
 
 uniform sampler2D texDiffuse;
@@ -84,5 +84,5 @@ void main() {
 
   //re-apply gamma to output buffer
   color.rgb = toGamma(color.rgb);
-  gl_FragColor = vec4(vec3(diffuse), 1.0);
+  gl_FragColor = vec4(color, 1.0);
 }
