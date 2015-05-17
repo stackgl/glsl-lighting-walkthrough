@@ -57,7 +57,7 @@ npm run build
 
 ## code overview
 
-The code is using Babelify for ES6 template strings and arrow functions, and is organized like so:
+The code is using Babelify for ES6 template strings, destructuring, and arrow functions. It is organized like so:
 
 - [index.js](index.js) - loads images, then boots up the app
 - [lib/app.js](lib/app.js) - sets up a WebGL render loop and draws the scene
