@@ -252,6 +252,8 @@ For lighting, we need to determine the vector from the view space surface positi
 The relevant bits of the fragment shader:
 
 ```glsl
+uniform mat4 view;
+
 #pragma glslify: attenuation = require('./attenuation')
 
 void main() {
