@@ -4,7 +4,7 @@
 
 [(live demo)](http://stack.gl/glsl-lighting-walkthrough/)
 
-This article provides an overview of the various steps involved in lighting a mesh with a custom shader. Some of the features of the demo:
+This article provides an overview of the various steps involved in lighting a mesh with a custom GLSL shader. Some of the features of the demo:
 
 - per-pixel lighting
 - flat & smooth normals
@@ -12,9 +12,9 @@ This article provides an overview of the various steps involved in lighting a me
 - normal & specular maps for detail
 - attenuation for point light falloff
 - Oren-Nayar diffuse for rough surfaces
-- phong reflectance model for specular highlights
+- Phong reflectance model for specular highlights
 
-It is not intended as a full-blown beginner's guide, and assumes prior knowledge of WebGL and stackgl rendering.
+It is not intended as a full-blown beginner's guide, and assumes prior knowledge of WebGL and stackgl rendering. Although it is implemented with stackgl, the same concepts and shader code could be used in ThreeJS and other frameworks.
 
 If you have questions, comments or improvements, please [post a new issue](https://github.com/stackgl/glsl-lighting-walkthrough/issues).
 
@@ -57,11 +57,11 @@ npm run build
 
 ## code overview
 
-The code is using Babelify for ES6 template strings and arrow functions, and is organized like so:
+The code is using Babelify for ES6 template strings, destructuring, and arrow functions. It is organized like so:
 
 - [index.js](index.js) - loads images, then boots up the app
 - [lib/app.js](lib/app.js) - sets up a WebGL render loop and draws the scene
-- [lib/scene.js](lib/scene.js) - positions the light and draws meshes
+- [lib/scene.js](lib/scene.js) - sets up textures, positions the light and draws meshes
 - [lib/create-sphere.js](lib/create-sphere.js) - create a 3D sphere for the light source
 - [lib/create-torus.js](lib/create-torus.js) - creates a 3D torus with a phong shader
 
@@ -79,6 +79,8 @@ We use a "phong" material for our torus, which we will explore in more depth bel
 - [shaders/phong.frag](lib/shaders/phong.frag)
 - [shaders/phong.vert](lib/shaders/phong.vert)
 
+There are many ways to skin a cat; this is just one approach to phong shading. 
+
 ## phong
 
 ### standard derivatives
@@ -93,6 +95,17 @@ if (!ext)
 
 var shader = createShader(gl, vert, frag)
 ...
+```
+
+And, in our fragment shader we need to enable it explicitly:
+
+```glsl
+#extension GL_OES_standard_derivatives : enable
+precision highp float;
+
+void main() {
+  ...
+}
 ```
 
 The extension is used in two places in our final shader:
@@ -241,6 +254,8 @@ For lighting, we need to determine the vector from the view space surface positi
 The relevant bits of the fragment shader:
 
 ```glsl
+uniform mat4 view;
+
 #pragma glslify: attenuation = require('./attenuation')
 
 void main() {
@@ -278,7 +293,7 @@ float attenuation(float r, float f, float d) {
 
 With our light direction, surface normal, and view direction, we can start to work on diffuse lighting. The color is multiplied by falloff to create the effect of a distant light.
 
-For rough surfaces, [glsl-diffuse-oren-nayar](https://www.npmjs.com/package/glsl-diffuse-oren-nayar) looks a bit better than [glsl-diffuse-lambert](https://www.npmjs.com/package/glsl-diffuse-lambert).
+For rough surfaces, [glsl-diffuse-oren-nayar](https://www.npmjs.com/package/glsl-diffuse-oren-nayar) looks a bit better than [glsl-diffuse-lambert](https://www.npmjs.com/package/glsl-diffuse-lambert). 
 
 ```glsl
 #pragma glslify: computeDiffuse = require('glsl-diffuse-oren-nayar')
@@ -292,11 +307,13 @@ For rough surfaces, [glsl-diffuse-oren-nayar](https://www.npmjs.com/package/glsl
   vec3 diffuseColor = textureLinear(texDiffuse, uv).rgb;
 ```
 
+These shading functions are known as [bidirectional reflectance distribution functions](http://en.wikipedia.org/wiki/Bidirectional_reflectance_distribution_function) (BRDF).
+
 ### specular
 
 ![specular](http://i.imgur.com/lDimd4U.png)
 
-Similarly, we can apply specular with one of the following:
+Similarly, we can apply specular with one of the following BRDFs:
 
 - [glsl-specular-blinn-phong](https://www.npmjs.com/package/glsl-specular-blinn-phong)
 - [glsl-specular-phong](https://www.npmjs.com/package/glsl-specular-phong)
@@ -339,6 +356,14 @@ Our final color is going straight to the screen, so we should re-apply the gamma
   gl_FragColor.rgb = toGamma(color);
   gl_FragColor.a   = 1.0;
 ```
+
+The [final result](http://stack.gl/glsl-lighting-walkthrough/). 
+
+## Further Reading
+
+- [Tom Dalling - Modern OpenGL Series](http://www.tomdalling.com/blog/category/modern-opengl/)
+- [GPU Gems - The Importance of Being Linear](http://http.developer.nvidia.com/GPUGems3/gpugems3_ch24.html)
+- [Normal Mapping Without Precomputed Tangents](http://www.thetenthplanet.de/archives/1180)
 
 ## License
 

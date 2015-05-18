@@ -1,6 +1,7 @@
 #extension GL_OES_standard_derivatives : enable
 precision highp float;
 
+//our custom Light struct
 struct Light {
   vec3 position;
   vec3 color;
@@ -13,6 +14,7 @@ varying vec2 vUv;
 varying vec3 vViewPosition;
 varying vec3 vNormal;
 
+//import some common functions
 #pragma glslify: faceNormals = require('glsl-face-normal')
 #pragma glslify: perturb = require('glsl-perturb-normal')
 #pragma glslify: computeDiffuse = require('glsl-diffuse-oren-nayar')
@@ -21,6 +23,7 @@ varying vec3 vNormal;
 #pragma glslify: toLinear = require('glsl-gamma/in')
 #pragma glslify: toGamma = require('glsl-gamma/out')
 
+//some settings for the look and feel of the material
 const vec2 UV_SCALE = vec2(8.0, 1.0);
 const float specularScale = 0.25;
 const float shininess = 20.0;
@@ -37,11 +40,13 @@ uniform mat4 view;
 
 uniform Light light;
 
+//account for gamma-corrected images
 vec4 textureLinear(sampler2D uTex, vec2 uv) {
   return toLinear(texture2D(uTex, uv));
 }
 
 void main() {
+  //determine the type of normals for lighting
   vec3 normal = vec3(0.0);
   if (flatShading == 1) {
     normal = faceNormals(vViewPosition);
