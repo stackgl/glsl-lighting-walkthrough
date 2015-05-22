@@ -324,7 +324,7 @@ Similarly, we can apply specular with one of the following BRDFs:
 
 Which one you choose depends on the material and aesthetic you are working with. In our case, `glsl-specular-phong` looks pretty good.
 
-Here we are using a specular map and `specularScale` multiplier to drive the strength. The above screen shot is scaled 100x for demonstration.
+The above screenshot is scaled by 100x for demonstration, using `specularScale` to drive the strength. The specular is also affected by the light attenuation.
 
 ```glsl
 #pragma glslify: computeSpecular = require('glsl-specular-phong')
@@ -334,6 +334,7 @@ Here we are using a specular map and `specularScale` multiplier to drive the str
   float specularStrength = textureLinear(texSpecular, uv).r;
   float specular = specularStrength * computeSpecular(L, V, N, shininess);
   specular *= specularScale;
+  specular *= falloff;
 ```
 
 ### final color
