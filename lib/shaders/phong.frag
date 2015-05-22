@@ -87,6 +87,6 @@ void main() {
 
   //re-apply gamma to output buffer
   color = toGamma(color);
-  gl_FragColor.rgb = vec3(color);
+  gl_FragColor.rgb = color;
   gl_FragColor.a = 1.0;
 }
