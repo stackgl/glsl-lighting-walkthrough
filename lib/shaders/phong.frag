@@ -25,7 +25,7 @@ varying vec3 vNormal;
 
 //some settings for the look and feel of the material
 const vec2 UV_SCALE = vec2(8.0, 1.0);
-const float specularScale = 0.25;
+const float specularScale = 0.65;
 const float shininess = 20.0;
 const float roughness = 1.0;
 const float albedo = 0.95;
@@ -78,7 +78,7 @@ void main() {
   vec3 N = perturb(normalMap, normal, -V, vUv); //surface normal
 
   //compute our diffuse & specular terms
-  float specular = specularStrength * computeSpecular(L, V, N, shininess) * specularScale;
+  float specular = specularStrength * computeSpecular(L, V, N, shininess) * specularScale * falloff;
   vec3 diffuse = light.color * computeDiffuse(L, V, N, roughness, albedo) * falloff;
   vec3 ambient = light.ambient;
 
@@ -87,6 +87,6 @@ void main() {
 
   //re-apply gamma to output buffer
   color = toGamma(color);
-  gl_FragColor.rgb = color;
+  gl_FragColor.rgb = vec3(color);
   gl_FragColor.a = 1.0;
 }
